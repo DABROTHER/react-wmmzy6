@@ -14,24 +14,32 @@ const MarkersList = props => {
             position={{ lat: location.lat(), lng: location.lng() }}
           />
         );
+        console.log("lo",position)
+        console.log("lo",location.lat)
       })}
     </span>
   );
 };
 
-class MapContainer extends React.Component {
+class googleMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      center:{
+        lat: 23.2526, 
+        lng: 77.4045
+      },
+      zoom:4,
       locations: []
     };
     this.handleMapClick = this.handleMapClick.bind(this);
   }
 
   handleMapClick = (ref, map, ev) => {
-    console.log("ev",ev)
+    console.log("ev",map.mapUrl)
     console.log("this.props",this.props)
     const location = ev.latLng;
+    console.log("location",location)
     this.setState(prevState => ({
       locations: [...prevState.locations, location]
     }));
@@ -45,12 +53,13 @@ class MapContainer extends React.Component {
         <Map
           google={this.props.google}
           className={"map"}
-          zoom={this.props.zoom}
-          initialCenter={this.props.center}
+          zoom={this.state.zoom}
+          initialCenter={this.state.center}
           onClick={this.handleMapClick}
         >
          <MarkersList locations={this.state.locations} icon="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png" />
         </Map>
+
       </div>
     );
   }
@@ -59,4 +68,4 @@ class MapContainer extends React.Component {
 export default GoogleApiWrapper({
   apiKey: "AIzaSyC9ZCM5EXl_YbQFKqxERWiLp-ANWqXKetk",
   libraries: []
-})(MapContainer);
+})(googleMap);
